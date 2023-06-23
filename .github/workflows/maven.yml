@@ -26,9 +26,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file myapp/pom.xml
+      run: mvn --batch-mode package --file myapp/pom.xml
     - name: Run the Maven verify phase
-      run: mvn --batch-mode --update-snapshots verify
+      run: mvn --batch-mode --update-snapshots --file myapp/pom.xml verify
 
   package:
       runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
         - uses: actions/setup-java@v3
           with:
             java-version: '20.0.1+9'
-        - run: mvn -B package --file myapp/pom.xml -DskipTests
+        - run: mvn --batch-mode package --file myapp/pom.xml -DskipTests
         - run: mkdir staging && cp target/*.jar staging
         - uses: actions/upload-artifact@v3
           with:
