@@ -45,3 +45,24 @@ jobs:
         with:
           name: Package
           path: staging
+      - id: image_version
+        run: |
+          export IMAGE_VERSION = "$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          echo "RELEASE_VERSION=${IMAGE_VERSION}"
+    outputs:
+      release_version: ${{ steps.image_version.outputs.release_version }}
+      
+          
+  build-docker-image:
+    name: Publish to Docker Hub
+    runs-on: ubuntu-latest
+    needs: [package]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Container image
+        run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ steps.image_version.outputs.release_version }} .
+      - name: Publish Docker image
+        run: docker push ${{ secrets.DOCKER_REPO }}
