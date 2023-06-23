@@ -26,7 +26,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn --batch-mode package --file myapp/pom.xml
+      run: mvn --batch-mode compile --file myapp/pom.xml
     - name: Run the Maven verify phase
       run: mvn --batch-mode --update-snapshots --file myapp/pom.xml verify
 
