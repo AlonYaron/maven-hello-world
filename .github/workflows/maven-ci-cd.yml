@@ -47,7 +47,7 @@ jobs:
           path: staging
       - id: image_version
         run: |
-          export IMAGE_VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          export IMAGE_VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout --file myapp/pom.xml)"
           echo "RELEASE_VERSION=${IMAGE_VERSION}"
     outputs:
       release_version: ${{ steps.image_version.outputs.release_version }}
