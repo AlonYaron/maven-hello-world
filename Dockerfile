@@ -3,7 +3,7 @@ RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY myapp/pom.xml /workspace
 COPY myapp/src /workspace/src
-RUN mvn -B package --file pom.xml -DskipTests
+RUN mvn --batch-mode package --file pom.xml -DskipTests -DbumpPatch
 
 FROM openjdk:14-slim
 COPY --from=build /workspace/target/*jar-with-dependencies.jar app.jar
