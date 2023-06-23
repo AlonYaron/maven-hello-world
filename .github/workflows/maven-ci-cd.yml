@@ -40,7 +40,7 @@ jobs:
           java-version: '20.0.1+9'
           distribution: 'temurin'
       - run: mvn --batch-mode package --file myapp/pom.xml -DskipTests
-      - run: mkdir staging && cp target/*.jar staging
+      - run: mkdir staging && cp myapp/target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
           name: Package
