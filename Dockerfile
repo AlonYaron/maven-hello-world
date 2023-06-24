@@ -1,6 +1,5 @@
 FROM maven:3.9.2-eclipse-temurin-20 AS build
-COPY myapp/pom.xml /workspace/
-COPY myapp/src /workspace/
+COPY myapp /workspace/
 WORKDIR /workspace
 RUN mvn --batch-mode package --file myapp/pom.xml -DskipTests -DbumpPatch
 
