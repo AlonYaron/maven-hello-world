@@ -51,7 +51,7 @@ jobs:
         run: |
           export IMAGE_VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout --file myapp/pom.xml)"
           echo "${IMAGE_VERSION}"
-          echo "{release_version}={${IMAGE_VERSION}}" >> $GITHUB_OUTPUT
+          echo "release_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout --file myapp/pom.xml)" >> "$GITHUB_OUTPUT"
     outputs:
       release_version: ${{ steps.image_version.outputs.release_version }}
       
