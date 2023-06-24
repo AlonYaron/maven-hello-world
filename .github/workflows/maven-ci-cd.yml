@@ -49,10 +49,9 @@ jobs:
           path: staging
       - id: image_version
         run: |
-          export IMAGE_VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout --file myapp/pom.xml)"
-          echo "::set-output name=release_version::${IMAGE_VERSION}"
+          echo IMAGE_VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout --file myapp/pom.xml)" >> $GITHUB_OUTPUT
     outputs:
-      release_version: ${{ steps.image_version.outputs.release_version }}
+      release_version: ${{ steps.image_version.outputs.IMAGE_VERSION }}
       
           
   build-docker-image:
@@ -62,12 +61,12 @@ jobs:
 
     steps:
       - env: 
-          IMAGE_VERSION: ${{ needs.package.outputs.release_version }}
+          IMAGE_VERSION: ${{ needs.package.outputs.IMAGE_VERSION }}
         run: echo "$IMAGE_VERSION"
       - uses: actions/checkout@v3
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Container image
-        run: docker build -t ${{ secrets.DOCKER_REPO }}:{{ needs.package.outputs.release_version }} .
+        run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ needs.package.outputs.IMAGE_VERSION }} .
       - name: Publish Docker image
         run: docker push ${{ secrets.DOCKER_REPO }}
