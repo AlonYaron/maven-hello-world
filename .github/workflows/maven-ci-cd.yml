@@ -66,4 +66,4 @@ jobs:
       - name: Build Container image
         run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ needs.package.outputs.release_version }} .
       - name: Publish Docker image
-        run: docker push ${{ secrets.DOCKER_REPO }}
+        run: docker push ${{ secrets.DOCKER_REPO }}:${{ needs.package.outputs.release_version }}
